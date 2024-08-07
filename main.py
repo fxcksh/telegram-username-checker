@@ -19,7 +19,7 @@ coloredlogs.install(level='ERROR', fmt='%(message)s', logger=logger)
 PREMIUM_USER = 'This account is already subscribed to Telegram Premium.'
 CHANNEL = 'Please enter a username assigned to a user.'
 NOT_FOUND = 'No Telegram users found.'
-RESERVED_WORDS = os.getenv('RESERVED_WORDS')
+RESERVED_WORDS = ['account', 'phone', 'download', 'flash', 'official', 'profiles', 'groups', 'help', 'projects', 'settings', 'legal', 'email', 'accounts', 'https', 'blogs', 'profile']
 
 
 class TelegramUsernameChecker(object):
