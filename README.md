@@ -10,17 +10,17 @@ The script may currently produce false positives when identifying free usernames
 git clone https://github.com/S4kur4H4run0/telegram-username-grabber.git
 cd telegram-username-grabber
 ```
-3. Create a virtual environment:
+2. Create a virtual environment:
 ```
 python3.12 -m venv env
 ```
 
-5. Activate the virtual environment:
+3. Activate the virtual environment:
 ```
 source env/bin/activate
 ```
 
-7. Install the required packages:
+4. Install the required packages:
 ```
 pip install -r requirements.txt
 ```
