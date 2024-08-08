@@ -8,8 +8,6 @@ The script may currently produce false positives when identifying free usernames
 1. Clone the repository and navigate into the directory:
 ```
 git clone https://github.com/S4kur4H4run0/telegram-username-grabber.git
-```
-```
 cd telegram-username-grabber
 ```
 3. Create a virtual environment:
