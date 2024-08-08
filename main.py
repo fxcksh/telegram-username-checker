@@ -6,12 +6,11 @@ import requests
 import re
 import logging
 import coloredlogs
-import os
 
 from lxml import html
 from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import urlparse
-
+from config import RESERVED_WORDS
 
 logger = logging.getLogger(__name__)
 coloredlogs.install(level='ERROR', fmt='%(message)s', logger=logger)
@@ -19,7 +18,6 @@ coloredlogs.install(level='ERROR', fmt='%(message)s', logger=logger)
 PREMIUM_USER = 'This account is already subscribed to Telegram Premium.'
 CHANNEL = 'Please enter a username assigned to a user.'
 NOT_FOUND = 'No Telegram users found.'
-RESERVED_WORDS = ['account', 'phone', 'download', 'flash', 'official', 'profiles', 'groups', 'help', 'projects', 'settings', 'legal', 'email', 'accounts', 'https', 'blogs', 'profile']
 
 
 class TelegramUsernameChecker(object):
