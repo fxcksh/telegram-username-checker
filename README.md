@@ -1,5 +1,8 @@
 # 💥Telegram Username Validator and Checker💥
-This Python script checks if a Telegram username is available or taken using the [fragment](https://fragment.com/) website and the [telegram](https://t.me/) web resource. No API key is required!
+             
+⎛⎝ ≽ > [⩊](https://t.me/+ICPFhQ-JTGhmZjc6) < ≼ ⎠⎞
+
+This Python script checks if a Telegram username is available or taken using the [fragment](https://fragment.com/) website and the [telegram](https://t.me/) web resource. No API key is required! 
 
 #### 🪲 MIND BUG WHEN USING:
 The script may currently produce false positives when identifying free usernames. This is due to Telegram’s reserved usernames, which are set aside for internal purposes. Additionally, there can be a delay before a username that has recently become available can be reused, so that username also may be marked as free but setting it is not available right now. I will fix it soon!
@@ -48,9 +51,4 @@ To test the script in the GitHub Actions environment, create an issue using the 
 
 [<img width="971" alt="Screenshot 2024-08-08 105111" src="https://github.com/user-attachments/assets/6f732206-ad69-40b6-b2d1-b8729f19a848">](https://github.com/fxcksh/telegram-username-grabber/actions/runs/10307476989)
 
-#### Remember, a cool username is not worth account or username theft. Choose any username you want by brute-forcing with your list ❤️‍🩹
-
-             
-⎛⎝ ≽ > [⩊](https://t.me/+ICPFhQ-JTGhmZjc6) < ≼ ⎠⎞
-        
-
+#### ❤️‍🩹 Remember, a cool username is not worth account or username theft. Choose any username you want by brute-forcing with your list ❤️‍🩹
