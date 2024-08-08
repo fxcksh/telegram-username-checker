@@ -37,7 +37,7 @@ To test the script in the GitHub Actions environment, create an issue using the 
 - Usernames must be listed one per line.
 - For format reference, see this [example](https://raw.githubusercontent.com/danielmiessler/SecLists/master/Usernames/Names/names.txt) file.
 
-### The results of workflow runs are accessible on the Actions page. 
+### The results of workflow runs are accessible on the Actions page
 
 [<img width="971" alt="Screenshot 2024-08-08 105111" src="https://github.com/user-attachments/assets/6f732206-ad69-40b6-b2d1-b8729f19a848">](https://github.com/fxcksh/telegram-username-grabber/actions/runs/10307476989)
 
