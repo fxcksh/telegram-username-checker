@@ -1,4 +1,4 @@
-# 💥 TELEGRAM USERNAME VALIDATOR AND CHECKER 💥
+# 💥Telegram Username Validator and Checker💥
 This Python script checks if a Telegram username is available or taken using the [fragment](https://fragment.com/) website and the [telegram](https://t.me/) web resource. No API key is required!
 
 #### 🪲 MIND BUG WHEN USING:
