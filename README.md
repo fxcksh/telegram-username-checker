@@ -1,23 +1,42 @@
-# CHECK IF TELEGRAM USERNAME BUSY OR NOT WITH DUMB PYTHON SCRIPT USING [FRAGMENT.COM](https://fragment.com/) API
+# TELEGRAM USERNAME VALIDATOR AND CHECKER
+This Python script checks if a Telegram username is available or taken using the [fragment](https://fragment.com/) website and the [telegram](https://t.me/) web resource. No API key is required!
 
-### 🪲 NOTE! FOR NOW THERE ARE SOME FALSE POSITIVE RESULTS IN CATEGORY OF FREE USERNAMES I WILL FIX SOON!
+#### 🪲 MIND BUG WHEN USING:
+The script may currently produce false positives when identifying free usernames. This is due to Telegram’s reserved usernames, which are set aside for internal purposes. Additionally, there can be a delay before a username that has recently become available can be reused, so that username also may be marked as free but setting it is not available right now. I will fix it soon!
 
-### Installation and Run (Local)
-1. `git clone https://github.com/S4kur4H4run0/telegram-username-grabber.git & cd telegram-username-grabber`
-2. `python3.12 -m venv env`
-3. `source env/bin/activate`
-4. `pip install requirements.txt`
+### Installation and Running (Locally)
+1. Clone the repository and navigate into the directory:
+  `git clone https://github.com/S4kur4H4run0/telegram-username-grabber.git`
+  `cd telegram-username-grabber`
 
-**Run the script with `python --file [https://raw.githubusercontent.com/path/to/usernames/list.txt] --verbose`**
+3. Create a virtual environment:
+  `python3.12 -m venv env`
 
-### Running in GitHub Actions environment
-If you want to test running in my repository actions create an issue with `Payload request` template and put a single url in the body and wait until I approve pipeline run 🥏
+5. Activate the virtual environment:
+  `source env/bin/activate`
 
-### Payload limitations
-For now only files hosted on `raw.githubusercontent.com` accepted and usernames must be divided by new lines. File format [example](https://raw.githubusercontent.com/danielmiessler/SecLists/master/Usernames/Names/names.txt)
+7. Install the required packages:
+  `pip install -r requirements.txt`
 
-**The results of workflow runs is accessible on [actions](https://github.com/S4kur4H4run0/telegram-username-grabber/actions) page**
+### Running the Script
+To run the script locally, use the following command:
 
-### ❤️‍🩹 HAVE FUN AND CHOOSE ANY USERNAME YOU WANT BY BRUTEFORCING WITH THE LIST YOU LIKE. REMEMBER THAT COOL USERNAME DOES NOT WORTH ACCOUNT OR USERNAME STEALING ❤️‍🩹
+`python script.py --file https://raw.githubusercontent.com/path/to/usernames/list.txt --verbose`
 
-#### 💊 xanax 
+Replace script.py with the actual name of your Python script.
+
+- The --file argument specifies the URL or path to the list of usernames.
+- The --verbose flag enables detailed logging output.
+
+### Running in GitHub Actions
+To test the script in the GitHub Actions environment, create an issue using the Payload request template. In the issue body, provide a single URL and wait for approval to run the pipeline. 🥏
+
+### Payload Limitations
+- Only files hosted on raw.githubusercontent.com are supported.
+- Usernames must be listed one per line.
+- For format reference, see this [example](https://raw.githubusercontent.com/danielmiessler/SecLists/master/Usernames/Names/names.txt) file.
+
+**The results of workflow runs are accessible on the Actions page.**
+
+#### ❤️‍🩹 Have fun and choose any username you want by brute-forcing with your preferred list. Remember, a cool username is not worth account or username theft! ❤️‍🩹
+
