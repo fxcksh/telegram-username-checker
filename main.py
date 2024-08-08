@@ -1,19 +1,20 @@
 import argparse
 import json
-import multiprocessing
-import time
-import requests
-import re
 import logging
+import multiprocessing
+import re
+import time
 import coloredlogs
+import requests
 
-from lxml import html
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import urlparse
+from lxml import html
 from config import RESERVED_WORDS
 
+
 logger = logging.getLogger(__name__)
-coloredlogs.install(level='ERROR', fmt='%(message)s', logger=logger)
+coloredlogs.install(level='INFO', fmt='%(message)s', logger=logger)
 
 PREMIUM_USER = 'This account is already subscribed to Telegram Premium.'
 CHANNEL = 'Please enter a username assigned to a user.'
@@ -60,11 +61,7 @@ class TelegramUsernameChecker(object):
             return api_url
 
     def get_user(self, username, api_url):
-        search_recipient_params = {
-            'query': username,
-            'months': 3,
-            'method': 'searchPremiumGiftRecipient'
-        }
+        search_recipient_params = {'query': username, 'months': 3, 'method': 'searchPremiumGiftRecipient'}
         response = self.session.post(api_url, data=search_recipient_params)
         error = response.json().get('error')
         return error
@@ -74,22 +71,26 @@ class TelegramUsernameChecker(object):
         text = f"You can contact @{username} right away."
         return text in html.fromstring(response.content)
 
-    def check_fragment_api(self, username):
+    def check_fragment_api(self, username, count=6):
+        if count == 0:
+            return
         self.session.headers.pop('Connection', None)
         api_url = self.get_api_url()
         if not api_url:
             logger.error(f'@{username} 💔 API URL not found')
             return
-        search_auctions = {
-            'type': 'usernames',
-            'query': username,
-            'method': 'searchAuctions'
-        }
+        search_auctions = {'type': 'usernames', 'query': username, 'method': 'searchAuctions'}
         response = self.session.post(api_url, data=search_auctions)
         response_data = response.json()
+
         if not isinstance(response_data, dict):
-            logger.error(f'@{username} 💔 Response is not a dict')
-            return
+            logger.debug(f'@{username} 💔 Response is not a dict (too many requests. retrying {count} ...)')
+            time.sleep(10)
+            return self.check_fragment_api(username, count - 1)
+        if not response_data.get('html'):
+            logger.debug(f'@{username} 💔 Request to fragment API failed. Retrying {count} ...')
+            time.sleep(6)
+            return self.check_fragment_api(username, count - 1)
         tree = html.fromstring(response_data.get('html'))
         xpath_expression = '//div[contains(@class, "tm-value")]'
         username_data = tree.xpath(xpath_expression)[:3]
@@ -102,49 +103,62 @@ class TelegramUsernameChecker(object):
         if username_tag[1:] != username:
             logger.error(f'@{username} 💔 Username not found in response')
             return
-        msg = f'{username_tag} | '
         if price.isdigit():
-            msg += f'{status} on fragment for {price}💎'
-            logger.error(msg)
+            logger.error(f'@{username} 💸 {status} on fragment for {price}💎')
             return
         user_info = self.get_user(username, api_url)
+
         if not user_info:
-            logger.critical(f'{username_tag} | 👤 User')
+            logger.critical(f'{username_tag} 👤 User')
             return
         elif PREMIUM_USER in user_info:
-            logger.error(f'{username_tag} | 👑 Premium User')
+            logger.error(f'{username_tag} 👑 Premium User')
             return
         elif CHANNEL in user_info:
-            logger.error(f'{username_tag} | 📢 Channel')
+            logger.error(f'{username_tag} 📢 Channel')
             return
         if user_info == NOT_FOUND and status == 'Unavailable':
             entity = self.get_telegram_web_user(username)
             if not entity:
-                logger.critical(f'✅ {username_tag} | Maybe Free or Reserved ✅')
+                logger.critical(f'✅ {username_tag} Maybe Free or Reserved ✅')
                 return True
-            logger.critical(f'🔒 {username_tag} | Premium User with privacy settings 🔒')
+            logger.critical(f'🔒 {username_tag} Premium User with privacy settings 🔒')
             return
 
         elif 'Bad request' in user_info:
-            logger.error(f'{username_tag} | 💔 Bad request')
+            logger.error(f'{username_tag} 💔 Bad request')
             return
         else:
-            logger.error(f'{username_tag} | 👀 Unknown api behaviour')
-            return
+            logger.error(f'{username_tag} 👀 Unknown api behaviour')
+            logger.debug(f'@{username} | Unknown api behaviour | {user_info} | {status}')
 
     def check(self, username):
         msg = f'@{username} '
         if not re.compile(r'^[a-zA-Z][a-zA-Z0-9_]{4,31}$').match(username):
-            logger.info(msg + '💀 Not allowed')
+            logger.info(msg + '💀  Not allowed')
             return
         if username.lower() in RESERVED_WORDS:
             logger.info(msg + '💀 Reserved')
             return
         result = self.check_fragment_api(username.lower())
-        time.sleep(6)
+        time.sleep(5)
         return result
 
     def run(self, multithread=True):
+
+        with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
+            future_to_username = {executor.submit(self.check, username): username for username in self.usernames}
+
+            for future in as_completed(future_to_username):
+                logger.debug(future)
+                username = future_to_username[future]
+                try:
+                    data = future.result()
+                except Exception as exc:
+                    logger.exception(fr'{username} generated an exception {exc.__class__.__name__}')
+                else:
+                    logger.debug(fr'{username} page is {data} bytes')
+
         if multithread:
             executor = ThreadPoolExecutor(max_workers=multiprocessing.cpu_count())
             executor.map(self.check, self.usernames)
@@ -154,17 +168,8 @@ class TelegramUsernameChecker(object):
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Check Telegram usernames.")
-    parser.add_argument(
-        '--file',
-        type=str,
-        required=False,
-        help='URL to the input file containing usernames'
-    )
-    parser.add_argument(
-        '--verbose',
-        action='store_true',
-        help='Enable verbose output'
-    )
+    parser.add_argument('--file', type=str, required=False, help='URL to the input file containing usernames')
+    parser.add_argument('--verbose', action='store_true', help='Enable verbose output')
     return parser.parse_args()
 
 
