@@ -38,6 +38,9 @@ To test the script in the GitHub Actions environment, create an issue using the 
 
 **The results of workflow runs are accessible on the Actions page.**
 
-#### ❤️‍🩹 Remember, a cool username is not worth account or username theft. Choose any username you want by brute-forcing with your list ❤️‍🩹
+#### Remember, a cool username is not worth account or username theft. Choose any username you want by brute-forcing with your list ❤️‍🩹
 
-⎛⎝ ≽ > ⩊ < ≼ ⎠⎞
+             
+⎛⎝ ≽ > [⩊](https://t.me/+ICPFhQ-JTGhmZjc6) < ≼ ⎠⎞
+        
+
